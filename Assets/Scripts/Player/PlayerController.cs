@@ -7,64 +7,58 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 public class PlayerController : MonoBehaviour
 {
-    [Header("Movement")]
     public float moveSpeed = 6f;
     public float jumpForce = 12f;
-
-    [Header("Ground Check")]
-    public Transform groundCheck;       // optional helper below feet
-    public LayerMask groundMask;        // set to your Ground layer in Inspector
+    public Transform groundCheck;
+    public LayerMask groundMask;
     public float groundRadius = 0.15f;
+    public float coyoteTime = 0.12f, jumpBuffer = 0.12f;
+
+    public SpriteRenderer sr;     // for flip
+    Animator anim;                // NEW
 
     Rigidbody2D rb;
-    SpriteRenderer sr;
-    Animator anim;                      // optional if you have animations
+    float coyoteCounter, jumpBufferCounter;
     bool grounded;
     bool facingRight = true;
 
-    void Awake() {
+    void Awake(){
         rb = GetComponent<Rigidbody2D>();
-        sr = GetComponent<SpriteRenderer>();
-        anim = GetComponent<Animator>(); // ok if null
-        // Rigidbody defaults
-        rb.gravityScale = 3f;
-        rb.freezeRotation = true;
+        if (sr == null) sr = GetComponent<SpriteRenderer>();
+        anim = GetComponent<Animator>();     // NEW
     }
 
-    void Update() {
-        // Horizontal input (arrows). Swap to A/D if you want later.
-        float x = 0f;
-        if (Input.GetKey(KeyCode.RightArrow)) x += 1f;
-        if (Input.GetKey(KeyCode.LeftArrow))  x -= 1f;
+    void Update(){
+        float x = Input.GetAxisRaw("Horizontal");
 
-        // Apply horizontal velocity
+        // movement
         rb.velocity = new Vector2(x * moveSpeed, rb.velocity.y);
 
-        // Flip sprite to face movement
+        // flip
         if (x > 0.01f) facingRight = true;
         else if (x < -0.01f) facingRight = false;
-        sr.flipX = !facingRight;
+        if (sr) sr.flipX = !facingRight;
 
-        // Ground check (optional but useful for jump gating)
-        if (groundCheck) {
-            grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, groundMask);
-        } else {
-            grounded = true; // if you haven't set it up yet, allow jumps
-        }
+        // ground + jump
+        grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, groundMask);
+        coyoteCounter = grounded ? coyoteTime : Mathf.Max(0, coyoteCounter - Time.deltaTime);
 
-        // Jump (Up Arrow)
-        if (grounded && Input.GetKeyDown(KeyCode.UpArrow)) {
+        if (Input.GetKeyDown(KeyCode.UpArrow)) jumpBufferCounter = jumpBuffer;
+        else jumpBufferCounter = Mathf.Max(0, jumpBufferCounter - Time.deltaTime);
+
+        if (coyoteCounter > 0 && jumpBufferCounter > 0){
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            coyoteCounter = 0; jumpBufferCounter = 0;
         }
 
-        // Drive animations if you set them up
-        if (anim) {
-            anim.SetFloat("Speed", Mathf.Abs(x));
-            anim.SetBool("IsGrounded", grounded);
+        // NEW: drive animations
+        if (anim){
+            anim.SetFloat("Speed", Mathf.Abs(x));  // 0 = idle, >0.1 = walk
+            // later you can also set: anim.SetBool("IsGrounded", grounded);
         }
     }
 
-    void OnDrawGizmosSelected() {
+    void OnDrawGizmosSelected(){
         if (!groundCheck) return;
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(groundCheck.position, groundRadius);
