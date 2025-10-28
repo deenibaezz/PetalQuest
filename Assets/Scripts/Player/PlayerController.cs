@@ -13,6 +13,9 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundMask;
     public float groundRadius = 0.15f;
     public float coyoteTime = 0.12f, jumpBuffer = 0.12f;
+    public float climbSpeed = 4f;
+    float defaultGravity;
+    bool onLadder;
 
     public SpriteRenderer sr;     // for flip
     Animator anim;                // NEW
@@ -23,6 +26,7 @@ public class PlayerController : MonoBehaviour
     bool facingRight = true;
 
     void Awake(){
+        defaultGravity = GetComponent<Rigidbody2D>().gravityScale;
         rb = GetComponent<Rigidbody2D>();
         if (sr == null) sr = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();     // NEW
@@ -38,6 +42,24 @@ public class PlayerController : MonoBehaviour
         if (x > 0.01f) facingRight = true;
         else if (x < -0.01f) facingRight = false;
         if (sr) sr.flipX = !facingRight;
+
+        if (onLadder) {
+            float v = 0f;
+            if (Input.GetKey(KeyCode.UpArrow)) v = 1f;
+            if (Input.GetKey(KeyCode.DownArrow)) v = -1f;
+            
+            rb.gravityScale = 0f; // no falling while on ladder
+            rb.velocity = new Vector2(rb.velocity.x, v * climbSpeed);
+
+            // optional: jump off the ladder
+            if (Input.GetKeyDown(KeyCode.Space)) {
+                onLadder = false;
+                rb.gravityScale = defaultGravity;
+                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            }
+            } else {
+                rb.gravityScale = defaultGravity;
+                }
 
         // ground + jump
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, groundMask);
@@ -62,5 +84,11 @@ public class PlayerController : MonoBehaviour
         if (!groundCheck) return;
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(groundCheck.position, groundRadius);
+    }
+    void OnTriggerEnter2D(Collider2D other) {
+    if (other.CompareTag("Climbable")) onLadder = true;
+    }
+    void OnTriggerExit2D(Collider2D other) {
+    if (other.CompareTag("Climbable")) onLadder = false;
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public bool HasWateringCan;
     public static GameManager I;
     public int SeedsCollectedThisLevel;
     public int MinSeedsToWin = 25;
