@@ -27,11 +27,13 @@ public class PlayerHealth : MonoBehaviour
         rb.velocity = new Vector2(hitFromDir.normalized.x * knockbackForce, knockbackForce);
 
         if (currentHearts <= 0){
-            // simple Game Over: load scene
-            SceneManager.LoadScene("GameOver");
-            return;
-        }
+    // remember which scene to retry
+    PlayerPrefs.SetInt("RetryIndex", UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+    PlayerPrefs.Save();
 
+    SceneManager.LoadScene("GameOver");
+    return;
+}
         // brief invincibility frames
         invincible = true;
         Invoke(nameof(EndInvincibility), invincibleTime);
