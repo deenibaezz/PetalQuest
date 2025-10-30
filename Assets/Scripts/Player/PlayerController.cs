@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(BoxCollider2D))]
 [RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(AudioSource))]
 
 public class PlayerController : MonoBehaviour
 {
@@ -23,7 +24,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("SFX")]
     public AudioClip sfxJump;
-    [Range(0f,1f)] public float volJump = 0.3f;
+    [Range(0f,1f)] public float volJump = 0.5f;
 
     float defaultGravity;
     bool onLadder;
@@ -32,6 +33,7 @@ public class PlayerController : MonoBehaviour
     Animator anim;                // NEW
 
     Rigidbody2D rb;
+    AudioSource audioSrc;
     float coyoteCounter, jumpBufferCounter;
     bool grounded;
     bool facingRight = true;
@@ -41,6 +43,11 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         if (sr == null) sr = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();     // NEW
+
+        audioSrc = GetComponent<AudioSource>();
+        audioSrc.playOnAwake = false;
+        audioSrc.spatialBlend = 0f;          // 2D
+        audioSrc.volume = 1f;   
     }
 
     void Update(){
@@ -67,7 +74,7 @@ public class PlayerController : MonoBehaviour
                 onLadder = false;
                 rb.gravityScale = defaultGravity;
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-            if (sfxJump) AudioSource.PlayClipAtPoint(sfxJump, Vector3.zero, volJump);
+            if (sfxJump) audioSrc.PlayOneShot(sfxJump, volJump);
             }
         } else {
             rb.gravityScale = defaultGravity;
@@ -82,6 +89,8 @@ public class PlayerController : MonoBehaviour
 
         if (coyoteCounter > 0 && jumpBufferCounter > 0){
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+
+            if (sfxJump) audioSrc.PlayOneShot(sfxJump, volJump);
             coyoteCounter = 0; jumpBufferCounter = 0;
         }
 
