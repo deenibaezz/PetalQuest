@@ -892,6 +892,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flowerPrefab: {fileID: 6227219358908222034, guid: c414d8f6d7cef4282a1b5e483eb89937, type: 3}
   promptUI: {fileID: 16130280}
+  sfxLadderGrow: {fileID: 8300000, guid: 7bd6b897eb5ca4b7d88a205c4a51640c, type: 3}
+  volLadder: 0.6
 --- !u!61 &325338080
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1578,6 +1580,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameOverScene: GameOver
+  sfxFall: {fileID: 8300000, guid: a235d590ef2a04d1b85b61ef4c21337c, type: 3}
+  volFall: 0.8
 --- !u!61 &604292914
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1733,6 +1737,8 @@ MonoBehaviour:
   requireButton: 1
   standTimeToEnter: 0.75
   promptText: {fileID: 1571918387}
+  sfxGateEnter: {fileID: 8300000, guid: 7478151cf36724a7dada558f746c3633, type: 3}
+  volGate: 0.6
 --- !u!1001 &759997275
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1920,13 +1926,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1775790501429231184, guid: 75e84fbdb66ab5647a06b786c6662307, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1235045160}
-    - targetCorrespondingSourceObject: {fileID: 1775790501429231184, guid: 75e84fbdb66ab5647a06b786c6662307, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1235045159}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75e84fbdb66ab5647a06b786c6662307, type: 3}
 --- !u!1001 &1009442510
 PrefabInstance:
@@ -2398,58 +2398,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 585769798}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1235045158 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1775790501429231184, guid: 75e84fbdb66ab5647a06b786c6662307, type: 3}
-  m_PrefabInstance: {fileID: 838445415}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1235045159
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1235045158}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00e522925d66f429aa502ce46787ffdd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!58 &1235045160
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1235045158}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.390625
 --- !u!1001 &1287397694
 PrefabInstance:
   m_ObjectHideFlags: 0

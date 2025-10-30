@@ -10,6 +10,10 @@ public class FlowerSpot : MonoBehaviour
     bool grown = false;
     bool playerIn = false;
 
+    [Header("SFX")]
+    public AudioClip sfxLadderGrow;
+    [Range(0f,1f)] public float volLadder = 0.6f;
+
     void Start(){
         if (promptUI) promptUI.SetActive(false);
     }
@@ -27,12 +31,14 @@ public class FlowerSpot : MonoBehaviour
     }
 
     void Update() {
-        // Show/hide prompt dynamically
-        UpdatePrompt();
+        UpdatePrompt(); // show/hide prompt dynamically
 
         if (!playerIn || grown) return;
-        if (GameManager.I.HasWateringCan && Input.GetKeyDown(KeyCode.Space)) {
+
+        bool pressed = Input.GetKeyDown(KeyCode.Space);
+        if (GameManager.I.HasWateringCan && pressed) {
             Instantiate(flowerPrefab, transform.position, Quaternion.identity);
+            Sfx2D.Play(sfxLadderGrow, volLadder);   // <— play watering/ladder sound
             grown = true;
             UpdatePrompt(); // hide prompt after blooming
             Debug.Log("Flowers bloomed!");

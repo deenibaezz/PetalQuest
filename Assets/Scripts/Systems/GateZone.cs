@@ -14,11 +14,15 @@ public class GateZone : MonoBehaviour
     [Header("UI (optional)")]
     public TMP_Text promptText;              // world-space TMP above the gate
 
+    [Header("SFX")]
+    public AudioClip sfxGateEnter;
+    [Range(0f,1f)] public float volGate = 0.6f;
+
     float timer = 0f;
     bool playerIn = false;
 
     void Start(){
-        UpdatePrompt(); // show initial state (likely "Need X more")
+        UpdatePrompt();
     }
 
     void OnTriggerEnter2D(Collider2D other){
@@ -38,29 +42,24 @@ public class GateZone : MonoBehaviour
     void Update(){
         if (!playerIn) return;
 
-        // Not enough seeds -> no entry
         int need = GameManager.I.MinSeedsToWin - GameManager.I.SeedsCollectedThisLevel;
-        if (need > 0){
-            // still update the prompt while standing here
-            UpdatePrompt();
-            return;
-        }
+        if (need > 0){ UpdatePrompt(); return; }
 
-        // Enough seeds
         if (requireButton){
             if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)){
-                EnterGarden();
+                StartCoroutine(EnterGardenWithSfx());
             }
         } else {
             timer += Time.deltaTime;
             if (timer >= standTimeToEnter){
-                EnterGarden();
+                StartCoroutine(EnterGardenWithSfx());
             }
         }
     }
 
-    void EnterGarden(){
-        // Optional: small SFX or fade here
+    IEnumerator EnterGardenWithSfx(){
+        Sfx2D.Play(sfxGateEnter, volGate);     // play gate-enter
+        yield return new WaitForSeconds(0.06f); // let the attack be heard
         SceneManager.LoadScene(gardenSceneName);
     }
 
@@ -68,11 +67,7 @@ public class GateZone : MonoBehaviour
         if (!promptText) return;
 
         int need = GameManager.I.MinSeedsToWin - GameManager.I.SeedsCollectedThisLevel;
-        if (!playerIn){
-            // Show static END text when not inside
-            promptText.text = "END";
-            return;
-        }
+        if (!playerIn){ promptText.text = "END"; return; }
 
         if (need > 0){
             promptText.text = $"Need {need} more seeds";

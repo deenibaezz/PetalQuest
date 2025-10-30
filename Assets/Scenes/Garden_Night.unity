@@ -174,6 +174,10 @@ MonoBehaviour:
     width: 16
     height: 1.2
   mainMenuScene: MainMenu
+  sfxGardenTada: {fileID: 8300000, guid: 2667a0a008b044e218b63df62e2be749, type: 3}
+  volTada: 0.85
+  sfxFlowerPop: {fileID: 8300000, guid: 32d4b1811dda14a6cb9e059ee8ad17d2, type: 3}
+  volPop: 0.35
 --- !u!4 &546926509
 Transform:
   m_ObjectHideFlags: 0
