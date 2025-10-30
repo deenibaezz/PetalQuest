@@ -17,4 +17,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Level_Day.unity
     guid: d0412e66429cb4e95baf5195794d4bb7
+  - enabled: 1
+    path: Assets/Scenes/Garden_Day.unity
+    guid: 3e228d1f37fea49a18fd88c726b6a8ef
+  - enabled: 1
+    path: Assets/Scenes/Garden_Night.unity
+    guid: 3ee27277c77c04b36af11b141f3ef4e7
   m_configObjects: {}
