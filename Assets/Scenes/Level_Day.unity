@@ -1441,7 +1441,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HasWateringCan: 0
   SeedsCollectedThisLevel: 0
-  MinSeedsToWin: 2
+  MinSeedsToWin: 10
 --- !u!4 &531581322
 Transform:
   m_ObjectHideFlags: 0

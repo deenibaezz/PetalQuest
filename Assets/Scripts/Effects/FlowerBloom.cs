@@ -4,40 +4,42 @@ using UnityEngine;
 
 public class FlowerBloom : MonoBehaviour
 {
-    public float growTime = 0.5f; // how long the animation lasts
-    public float finalScale = 1f; // 100% size
-    float delay;
+    public float growTime = 0.5f;
+    public float finalScale = 1f;
+    public float randomStartDelayMax = 0.4f;
 
     SpriteRenderer sr;
     Vector3 targetScale;
     float timer;
+    float delay;
 
     void Awake()
     {
+        // get a renderer on this object or any child
         sr = GetComponent<SpriteRenderer>();
-    targetScale = transform.localScale;
+        if (!sr) sr = GetComponentInChildren<SpriteRenderer>();
 
-    transform.localScale = Vector3.zero;
-    if (sr) sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0f);
+        targetScale = transform.localScale;
 
-    // small random delay so they don't all start at once
-    delay = Random.Range(0f, 0.4f);
-}
+        transform.localScale = Vector3.zero;
+        if (sr){
+            var c = sr.color; c.a = 0f; sr.color = c;
+        }
+
+        delay = Random.Range(0f, randomStartDelayMax);
+    }
 
     void Update()
     {
-        if (delay > 0f) { delay -= Time.deltaTime; return; }
+        if (delay > 0f){ delay -= Time.deltaTime; return; }
 
-    timer += Time.deltaTime;
-    float t = Mathf.Clamp01(timer / growTime);
+        timer += Time.deltaTime;
+        float t = Mathf.Clamp01(timer / growTime);
 
-    transform.localScale = Vector3.Lerp(Vector3.zero, targetScale, t);
+        transform.localScale = Vector3.Lerp(Vector3.zero, targetScale * finalScale, t);
 
-    if (sr)
-    {
-        Color c = sr.color;
-        c.a = Mathf.Lerp(0f, 1f, t);
-        sr.color = c;
+        if (sr){
+            Color c = sr.color; c.a = Mathf.Lerp(0f, 1f, t); sr.color = c;
+        }
     }
-}
 }
