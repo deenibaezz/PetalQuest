@@ -926,7 +926,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee012aefd9b9d4847a4bde2f44eda087, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelToRetry: Level_Day
   mainMenuScene: MainMenu
 --- !u!4 &1333424697
 Transform:

@@ -35,10 +35,12 @@ public class BeetleHurtbox : MonoBehaviour
             // bounce player up
             playerRb.velocity = new Vector2(playerRb.velocity.x, stompBounce);
             // destroy beetle
+            AudioManager.I.Play("bug_squish");
             Destroy(gameObject);
         } else {
             // damage player & knock them away from beetle
             Vector2 away = (c.collider.transform.position.x < transform.position.x) ? Vector2.left : Vector2.right;
+            AudioManager.I.Play("player_ouch", 1f);
             player.TakeDamage(1, away);
         }
     }

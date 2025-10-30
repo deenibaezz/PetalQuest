@@ -5,15 +5,26 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(BoxCollider2D))]
 [RequireComponent(typeof(SpriteRenderer))]
+
 public class PlayerController : MonoBehaviour
 {
+    [Header("Move/Jump")]
     public float moveSpeed = 6f;
     public float jumpForce = 12f;
+
+    [Header("Ground Check")]
     public Transform groundCheck;
     public LayerMask groundMask;
     public float groundRadius = 0.15f;
     public float coyoteTime = 0.12f, jumpBuffer = 0.12f;
+
+    [Header("Climb")]
     public float climbSpeed = 4f;
+
+    [Header("SFX")]
+    public AudioClip sfxJump;
+    [Range(0f,1f)] public float volJump = 0.3f;
+
     float defaultGravity;
     bool onLadder;
 
@@ -56,10 +67,11 @@ public class PlayerController : MonoBehaviour
                 onLadder = false;
                 rb.gravityScale = defaultGravity;
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            if (sfxJump) AudioSource.PlayClipAtPoint(sfxJump, Vector3.zero, volJump);
             }
-            } else {
-                rb.gravityScale = defaultGravity;
-                }
+        } else {
+            rb.gravityScale = defaultGravity;
+        }
 
         // ground + jump
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, groundMask);
